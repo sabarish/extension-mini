@@ -12,7 +12,7 @@
   },
   "permissions": ["storage", "tabs","cookies", "https://*/*"],
   "background": {    
-  	"scripts": ["background.js"]    
+  	"scripts": ["js/jquery-3.3.1.min.js","background.js"]    
   },
   "manifest_version": 2
 }
