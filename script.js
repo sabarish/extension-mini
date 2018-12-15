@@ -1,8 +1,14 @@
 // Code goes here
 $(document).ready(function() {
-  chrome.storage.sync.get(['program_url', 'user_id'], function(result) {
-   user_id = parseInt(result.user_id)
-   url = result.program_url
+  chrome.storage.sync.get(['program_url', 'user_id', 'is_connected'], function(result) {
+   user_id = parseInt(result.user_id);
+   url = result.program_url;
+   if(result.is_connected){
+     $('a.navbar-brand').attr('href', 'connected_user.html');
+   }
+   else{
+     $('a.navbar-brand').attr('href', 'unconnected_user.html');
+   }
    if(user_id){ 
     $.ajax({
       type: "GET",

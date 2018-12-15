@@ -140,6 +140,23 @@ function setBrowserIcon(color){
   });
 }
 
+function updateConnectionPopup() {
+  chrome.storage.sync.get(['is_connected', 'roles'], function(result) {
+    if(result.is_connected){
+      alert("connection");
+      chrome.browserAction.setPopup({popup: 'connected_user.html'}, function(){});
+    }
+    else{
+      if(result.roles != undefined && result.roles.indexOf("student") !== -1){
+        chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
+      }
+      else if(result.roles != undefined && result.roles.indexOf("mentor") !== -1){
+        chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
+      }
+    }
+  }); 
+}
+
 function updateCookies(program_url){
     chrome.cookies.get({url: program_url, name:'session_active'}, function(cookie) {
       if (cookie) {    
@@ -153,6 +170,7 @@ function updateCookies(program_url){
           chrome.browserAction.setBadgeText({text: notifications.noti_count });
         });
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
+        updateConnectionPopup();       
       }
       else{    
         // chrome.storage.sync.set({"chronuslogin": false});
@@ -170,7 +188,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (sender.url.includes(result.program_url)){
       UserId = parseInt(request.loginstatus)
       if (UserId){
-        getUserDetails(UserId, result.program_url);        
+        getUserDetails(UserId, result.program_url);
         getNotifications(UserId, result.program_url);
         getNotificationsList(UserId, result.program_url);
         chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
