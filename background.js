@@ -96,7 +96,7 @@ function updateCookies(program_url){
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
         chrome.browserAction.setBadgeText({text: getNotificationCount()});
-        chrome.browserAction.setPopup({popup: 'loggedin.html'}, function(){});
+        chrome.browserAction.setPopup({popup: 'mentor_mentee_list.html'}, function(){});
       }
       else{    
         // chrome.storage.sync.set({"chronuslogin": false});
