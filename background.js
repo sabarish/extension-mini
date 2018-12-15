@@ -5,7 +5,7 @@ function focusOrCreateTab(url) {
       var tabs = windows[i].tabs;
       for (var j in tabs) {
         var tab = tabs[j];
-        if (tab.url == url) {
+        if (tab.url.includes(url)) {
           existing_tab = tab;
           break;
         }
@@ -14,7 +14,7 @@ function focusOrCreateTab(url) {
     if (existing_tab) {
       chrome.tabs.update(existing_tab.id, {"selected":true});
     } else {
-      chrome.tabs.create({"url":url, "selected":true});
+      chrome.tabs.create({"url":url+"/session/new", "selected":true});
     }
   });
 }
@@ -22,6 +22,19 @@ function focusOrCreateTab(url) {
 function getNotificationCount(){
   return "5";
 }
+
+//function getNotifications(user_id, url){
+ // jQuery.ajax({
+   // type: "GET",
+    //data: { 'user_id': user_id },
+    //url: url+"/get_notifications.json",
+    //success: function(response){    
+     // console.log("hii"+user_id);
+      //setTimeout(getNotifications(user_id, url), 2000);
+    //}
+ // });
+//}
+
 
 function isUserLoggedin(){
   var np = new Promise(function (resolve, reject) {
@@ -59,31 +72,70 @@ function setBrowserIcon(color){
   });
 }
 
-chrome.cookies.get({url: "https://onboarding.chronus.com", name:'session_active'}, function(cookie) {
-  if (true) {    
-    chrome.storage.sync.set({"chronusloginurl": "https://onboarding.chronus.com"}, function(){});
-    chrome.storage.sync.set({"chronuslogin": true}, function(){});
-    setBrowserIcon("color");
-    loginURL();
-    isUserLoggedin();
-    chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
-      chrome.browserAction.setBadgeText({text: getNotificationCount()});
-  }
-  else{    
-    chrome.storage.sync.set({"chronuslogin": false});
-    setBrowserIcon("grey");
-    chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
-    chrome.browserAction.setBadgeText({text: ''});
-  }
+function updateCookies(program_url){
+    chrome.cookies.get({url: program_url, name:'session_active'}, function(cookie) {
+      if (cookie) {    
+        // chrome.storage.sync.set({"chronusloginurl": "https://onboarding.chronus.com"}, function(){});
+        // chrome.storage.sync.set({"chronuslogin": true}, function(){});
+        setBrowserIcon("color");
+        // loginURL();
+        // isUserLoggedin();
+        chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
+        chrome.browserAction.setBadgeText({text: getNotificationCount()});
+      }
+      else{    
+        // chrome.storage.sync.set({"chronuslogin": false});
+        setBrowserIcon("grey");
+        chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
+        chrome.browserAction.setBadgeText({text: ''});
+        chrome.storage.sync.remove('user_id', function(){});
+      }
+      chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+        if(message.method == "testlogin"){
+          if (cookie){
+            sendResponse({status: "loggedin"});
+          }
+          else{
+            sendResponse({status: "loggedout"});
+          }
+        }
+      });
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  chrome.storage.sync.get(['program_url', 'from_extension'], function(result) {
+    if (sender.url.includes(result.program_url)){
+      UserId = parseInt(request.loginstatus)
+      if (UserId){
+        //getNotifications(UserId, result.program_url);
+        chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
+        if (result.from_extension){
+          chrome.tabs.remove(sender.tab.id);
+          chrome.storage.sync.remove('from_extension', function(){});
+        }
+      }
+      updateCookies(result.program_url);
+    }
+  });
 });
 
 
 
 // chrome.browserAction.onClicked.addListener(function(tab) {
-  // var manager_url = chrome.extension.getURL("https://onboarding.chronus.com");
-  // alert("hello");
-  // focusOrCreateTab(manager_url);
+//   var url = chrome.extension.getURL("https://iitm.localhost.com:3000/p/p1");
+//   var program_url = url.match(/\bhttps?:\/\/\S+/gi)[0] 
+//   var login_url = program_url + "/session/new";
+  
 // });
+jQuery(document).ready(function() {
+  jQuery('#login_to_program').click(function() {
+    var program_url = jQuery('#program_url').val();
+    chrome.storage.sync.set({'program_url': program_url}, function() {});
+    chrome.storage.sync.set({'from_extension': true}, function() {});
+    focusOrCreateTab(program_url);
+  });
+});
 
 chrome.runtime.onInstalled.addListener(function() {
   if(loginURL() != null){
@@ -97,5 +149,4 @@ chrome.runtime.onInstalled.addListener(function() {
     $("#notifications").removeClass("hide");
     chrome.storage.sync.set({"chronuslogin": false}, function(){});
   }
-  alert("hi");
 });

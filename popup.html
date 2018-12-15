@@ -6,6 +6,7 @@
 				
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="popup.js"></script>
 		<script type="text/javascript" src="background.js"></script>
 				
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -26,13 +27,13 @@
 			</div>
 		</nav>
 		<section style="padding: 10px;">
-			<form class = "hide" action="#" id="loginform">
+			<form action="#" id="loginform">
 			  <img id="logged_in" src="images/chronus_color_128.png" height="80px" width="70px" class="center">
 			  <div style="margin: 15px 0px;"> Your are not logged in. Please provide your program URL below. </div>
-			  <input type="text" name="firstname" placeholder="Program URL" ="" class="form-control"><br>			  
-			  <button class="button">Login</button>
+			  <input type="text" id="program_url" name="firstname" placeholder="Program URL" ="" class="form-control"><br>			  
+			  <input type="submit" class="button" value="Login" id="login_to_program">
 			</form>
-			<table class="table " id="notifications">
+			<table class="table hide" id="notifications">
 				<tbody>
 					<tr><td><i class="glyphicon glyphicon-envelope"></i><span style="padding-left:10px">Jyothi Prakash has sent you a message.</span></td></tr>
 					<tr><td><i class="glyphicon glyphicon-envelope"></i><span style="padding-left:10px">Pradiv has sent you a request for mentoring.</span></td></tr>
