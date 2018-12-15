@@ -21,12 +21,12 @@ label {
   margin-bottom: 5px;
 }
 
-input{
+input[type=text]{
 	padding: 0 40px 0 10px;
 	border: 1px solid #C4CCD1;
-    box-shadow: inset 0px 1px 3px 0px rgba(140, 150, 157, .3);
-    border-radius: 4px;
-    height: 40px;
+  box-shadow: inset 0px 1px 3px 0px rgba(140, 150, 157, .3);
+  border-radius: 4px;
+  height: 40px;
 }
 
 textarea{
@@ -53,11 +53,11 @@ textarea{
   margin-right: auto;  
 }
 
-section a.list-group-item:first-child{
+section .list-group-item:first-child{
   border-top: 0px !important;  
 }
 
-section a.list-group-item{  
+section .list-group-item{  
   border-left: 0px !important;
   border-right: 0px !important;
 }
