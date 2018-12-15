@@ -1,8 +1,8 @@
 // Code goes here
 $(document).ready(function() {
   chrome.storage.sync.get(['program_url', 'user_id'], function(result) {
-   user_id = parseInt(result.user_id)
-   url = result.program_url
+   user_id = parseInt(result.user_id);
+   url = result.program_url;
    if(user_id){ 
     $.ajax({
       type: "GET",
