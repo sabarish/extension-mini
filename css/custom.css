@@ -1,25 +1,26 @@
-/**
- * Chrome Extension Twitter Bootstrap 3 Template
- * Custom CSS
- *	
- */
-
-body, section {			/* Change width and height to own preferences */
-	width: 400px;
-	height: 300px;
+body, section {
+	width: 450px;
+	height: 400px;
 	overflow-x: hidden;
 }
 
-/* Basic style tweaks */
-section { padding: 5px;}
-.navbar { margin-bottom: 2px; }
+section { 
+  padding: 5px;
+}
+
+.navbar { 
+  margin-bottom: 2px; 
+}
+
 form {
   margin: 0 0 18px;
 }
+
 label {
   display: block;
   margin-bottom: 5px;
 }
+
 input{
 	padding: 0 40px 0 10px;
 	border: 1px solid #C4CCD1;
@@ -27,6 +28,12 @@ input{
     border-radius: 4px;
     height: 40px;
 }
+
+textarea{
+  resize: none;
+  overflow-y: auto !important;
+}
+
 .button{
 	margin: 5px 0;
     font-size: 15px;
@@ -39,6 +46,7 @@ input{
     -webkit-border-radius: 5px;
     border-radius: 5px;
 }
+
 .center {
   display: block;
   margin-left: auto;
@@ -46,6 +54,14 @@ input{
 }
 
 /* Scroll Bar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); }
-::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:window-inactive  { background: red; }
+::-webkit-scrollbar { 
+  width: 6px; 
+}
+
+::-webkit-scrollbar-track { 
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+
+::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:window-inactive  { 
+  background: red; 
+}
