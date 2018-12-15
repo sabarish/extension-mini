@@ -23,17 +23,17 @@ function getNotificationCount(){
   return "5";
 }
 
-//function getNotifications(user_id, url){
- // jQuery.ajax({
-   // type: "GET",
-    //data: { 'user_id': user_id },
-    //url: url+"/get_notifications.json",
-    //success: function(response){    
-     // console.log("hii"+user_id);
-      //setTimeout(getNotifications(user_id, url), 2000);
-    //}
- // });
-//}
+// function getNotifications(user_id, url){
+//  jQuery.ajax({
+//    type: "GET",
+//     data: { 'user_id': user_id },
+//     url: url+"/get_notifications.json",
+//     success: function(response){    
+//      console.log("hii"+user_id);
+//       setTimeout(getNotifications(user_id, url), 2000);
+//     }
+//  });
+// }
 
 
 function isUserLoggedin(){
@@ -82,6 +82,7 @@ function updateCookies(program_url){
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
         chrome.browserAction.setBadgeText({text: getNotificationCount()});
+        chrome.browserAction.setPopup({popup: 'loggedin.html'}, function(){});
       }
       else{    
         // chrome.storage.sync.set({"chronuslogin": false});
@@ -89,17 +90,8 @@ function updateCookies(program_url){
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
         chrome.browserAction.setBadgeText({text: ''});
         chrome.storage.sync.remove('user_id', function(){});
+        chrome.browserAction.setPopup({popup: 'popup.html'}, function(){});
       }
-      chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-        if(message.method == "testlogin"){
-          if (cookie){
-            sendResponse({status: "loggedin"});
-          }
-          else{
-            sendResponse({status: "loggedout"});
-          }
-        }
-      });
     });
 }
 
