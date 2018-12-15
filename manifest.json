@@ -8,11 +8,19 @@
       "48": "images/chronus_color_48.png",
       "128": "images/chronus_color_128.png"
     },
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "images/chronus_grey_16.png"
   },
-  "permissions": ["storage", "tabs","cookies", "https://*/*"],
-  "background": {    
-  	"scripts": ["js/jquery-3.3.1.min.js","background.js"]    
+
+  "content_scripts": [ {
+    "matches": ["https://iitm.localhost.com:3000/*", "https://*.realizegoal.com/*", "https://*.chronus.com/*"],
+    "js":     ["js/jquery-3.3.1.min.js", "content.js"]
+  } ],
+
+  "background": {      	
+  	"scripts": ["js/jquery-3.3.1.min.js", "background.js"]
   },
+  "permissions": ["storage", "tabs", "cookies", "https://*/*", "notifications", "webNavigation"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://iitm.localhost.com:3000/*; object-src 'self'",
   "manifest_version": 2
 }
