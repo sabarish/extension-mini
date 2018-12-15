@@ -23,17 +23,31 @@ function getNotificationCount(){
   return "5";
 }
 
-// function getNotifications(user_id, url){
-//  jQuery.ajax({
-//    type: "GET",
-//     data: { 'user_id': user_id },
-//     url: url+"/get_notifications.json",
-//     success: function(response){    
-//      console.log("hii"+user_id);
-//       setTimeout(getNotifications(user_id, url), 2000);
-//     }
-//  });
-// }
+function createNotification(details){
+  var i;
+  for (i = 0; i < details.length; i++) { 
+    options = {
+      type: "basic",
+      iconUrl: "images/chronus_color_48.png",
+      title: details[i]["title"],
+      message: details[i]["message"]
+    }
+    chrome.notifications.create('noti', options)
+  }
+}
+
+function getNotifications(user_id, url){
+  jQuery.ajax({
+    type: "GET",
+    data: { 'user_id': user_id },
+    url: url+"/get_notifications.json",
+    success: function(response){
+      console.log("hii"+user_id);
+      createNotification(response);
+      setTimeout(getNotifications(user_id, url), 5000);
+    }
+  });
+}
 
 
 function isUserLoggedin(){
@@ -100,7 +114,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (sender.url.includes(result.program_url)){
       UserId = parseInt(request.loginstatus)
       if (UserId){
-        //getNotifications(UserId, result.program_url);
+        getNotifications(UserId, result.program_url);
         chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
         if (result.from_extension){
           chrome.tabs.remove(sender.tab.id);
