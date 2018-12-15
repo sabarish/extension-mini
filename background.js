@@ -128,8 +128,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (sender.url.includes(result.program_url)){
       UserId = parseInt(request.loginstatus)
       if (UserId){
-        getUserDetails(UserId, result.program_url);
-        getUserGroups();
+        getUserDetails(UserId, result.program_url);        
         getNotifications(UserId, result.program_url);
         chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
         if (result.from_extension){
