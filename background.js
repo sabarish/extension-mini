@@ -25,8 +25,8 @@ function createNotification(details){
   chrome.storage.sync.get('noti_count', function(notifications){
     old_count = parseInt(notifications.noti_count) || 0;
     new_count = old_count + details.length
-    new_count = new_count || ''
     if (new_count != old_count){ 
+      new_count = new_count || ''
       chrome.browserAction.setBadgeText({text: new_count.toString() });
       chrome.storage.sync.set({'noti_count': new_count.toString()}, function(){}); }
   });
@@ -76,7 +76,7 @@ function getNotifications(user_id, url){
     success: function(response){
       console.log("hii"+user_id);
       createNotification(response);
-      setTimeout(getNotifications(user_id, url), 3000);
+      setTimeout(getNotifications(user_id, url), 500);
     }
   });
 }
@@ -149,7 +149,9 @@ function updateCookies(program_url){
         // loginURL();
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
-        chrome.browserAction.setBadgeText({text: ''});
+        chrome.storage.sync.get('noti_count', function(notifications){
+          chrome.browserAction.setBadgeText({text: notifications.noti_count });
+        });
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
       }
       else{    
