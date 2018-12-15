@@ -9,8 +9,7 @@ $(document).ready(function() {
       data: { 'user_id': user_id },
       url: url + "/recommended_mentors.json",
       crossDomain: true,
-      success: function(json){
-        console.log(json);
+      success: function(json){        
         var response = '',
               indicator = '';
           for(var i=0; i < json.results.length; i++){
