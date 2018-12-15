@@ -26,6 +26,10 @@ $(document).ready(function() {
   }});
 });
 
-jQuery('#notification_tab').click(function(){
-  chrome.browserAction.setBadgeText({text: '0' });
+jQuery(document).on("click", "#notification_tab", function(){
+  chrome.browserAction.setBadgeText({text: '' });
+});
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  jQuery('#notifications').html(request.listt);
 });

@@ -39,14 +39,15 @@ function createNotification(details){
 function createNotificationList(list, url){
   var i;
   var count = (list.length !=0 ) ? list.length.toString() : '0'
-  chrome.browserAction.setBadgeText({text: count });
+  //chrome.browserAction.setBadgeText({text: count });
   var notification_list = '';
   for (i = 0; i < list.length; i++) {
     open_url = (list[i]["url"] != null) ? list[i]["url"] : url
-    notification_list += '<a href="'+ open_url +'" class="list-group-item list-group-item-action"><i class="glyphicon glyphicon-envelope"></i><span style="padding-left:10px">' + list[i]["message"] + '</span></a>';
+    notification_list += '<a href="'+ open_url +'" target="_blank" class="list-group-item list-group-item-action"><i class="glyphicon glyphicon-envelope"></i><span style="padding-left:10px">' + list[i]["message"] + '</span></a>';
   }
-  jQuery('#notifications').append(notification_list);
+  //jQuery('#notifications').append(notification_list);
   // chrome.storage.sync.set({'content': notification_list }, function(){});
+  chrome.runtime.sendMessage({listt: notification_list}, function(response){});
 }
 
 function store_details(user_details){
@@ -153,8 +154,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (sender.url.includes(result.program_url)){
       UserId = parseInt(request.loginstatus)
       if (UserId){
-        getUserDetails(UserId, result.program_url);
-        getUserGroups();
+        getUserDetails(UserId, result.program_url);        
         getNotifications(UserId, result.program_url);
         getNotificationsList(UserId, result.program_url);
         chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
