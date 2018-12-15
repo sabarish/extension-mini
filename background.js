@@ -25,15 +25,28 @@ function getNotificationCount(){
 
 function createNotification(details){
   var i;
-  for (i = 0; i < details.length; i++) { 
+  for (i = 0; i < details.length; i++) {
     options = {
       type: "basic",
       iconUrl: "images/chronus_color_48.png",
-      title: details[i]["title"],
+      title: "Chronus Lite",
       message: details[i]["message"]
     }
     chrome.notifications.create('noti', options)
   }
+}
+
+function createNotificationList(list, url){
+  var i;
+  var count = (list.length !=0 ) ? list.length.toString() : '0'
+  chrome.browserAction.setBadgeText({text: count });
+  var notification_list = '';
+  for (i = 0; i < list.length; i++) {
+    open_url = (list[i]["url"] != null) ? list[i]["url"] : url
+    notification_list += '<a href="'+ open_url +'" class="list-group-item list-group-item-action"><i class="glyphicon glyphicon-envelope"></i><span style="padding-left:10px">' + list[i]["message"] + '</span></a>';
+  }
+  jQuery('#notifications').append(notification_list);
+  // chrome.storage.sync.set({'content': notification_list }, function(){});
 }
 
 function store_details(user_details){
@@ -43,12 +56,24 @@ function store_details(user_details){
 function getNotifications(user_id, url){
   jQuery.ajax({
     type: "GET",
-    data: { 'user_id': user_id },
+    data: { 'user_id': user_id, 'target': 'desktop' },
     url: url+"/get_notifications.json",
     success: function(response){
       console.log("hii"+user_id);
       createNotification(response);
       setTimeout(getNotifications(user_id, url), 5000);
+    }
+  });
+}
+
+function getNotificationsList(user_id, url){
+  jQuery.ajax({
+    type: "GET",
+    data: { 'user_id': user_id, 'target': 'list' },
+    url: url+"/get_notifications.json",
+    success: function(response){
+      createNotificationList(response, url);
+      setTimeout(getNotificationsList(user_id, url), 10000);
     }
   });
 }
@@ -109,7 +134,7 @@ function updateCookies(program_url){
         // loginURL();
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
-        chrome.browserAction.setBadgeText({text: getNotificationCount()});
+        chrome.browserAction.setBadgeText({text: "0"});
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
       }
       else{    
@@ -131,6 +156,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         getUserDetails(UserId, result.program_url);
         getUserGroups();
         getNotifications(UserId, result.program_url);
+        getNotificationsList(UserId, result.program_url);
         chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
         if (result.from_extension){
           chrome.tabs.remove(sender.tab.id);
@@ -142,14 +168,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   });
 });
 
-
-
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//   var url = chrome.extension.getURL("https://iitm.localhost.com:3000/p/p1");
-//   var program_url = url.match(/\bhttps?:\/\/\S+/gi)[0] 
-//   var login_url = program_url + "/session/new";
-  
-// });
 jQuery(document).ready(function() {
   jQuery('#login_to_program').click(function() {
     var program_url = jQuery('#program_url').val();

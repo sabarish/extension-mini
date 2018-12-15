@@ -25,3 +25,7 @@ $(document).ready(function() {
     });
   }});
 });
+
+jQuery('#notification_tab').click(function(){
+  chrome.browserAction.setBadgeText({text: '0' });
+});
