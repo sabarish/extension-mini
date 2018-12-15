@@ -1,16 +1,22 @@
 // Code goes here
 $(document).ready(function() {
-   $.getJSON('data.json',function(json){
+  $.ajax({
+    type: "GET",
+    url: "https://iitm.localhost.com:3000/p/p1/recommended_mentors.json",
+    crossDomain: true,
+    success: function(json){
+      console.log(json);
       var response = '',
-          indicator = '';
-      for(var i=0; i < json.results.length; i++){
-        response += '<div class="item"><div><center><img alt="Profilepicture" title="New Hire" id="" class="table-bordered thick-border img-circle" src="' + json.results[i].image + '" width="50%" height="75%"></center></div><div class=""><center><h3>' + json.results[i].Title + '</h3><p>' + json.results[i].Content + '</p><h5>Match Summary</h5></center></div></div>';
-        // indicator += '<li data-target="#myCarousel" data-slide-to="'+i+'"></li>';
-      }
-      $('#homepageItems').append(response);
-      $('#indicators').append(indicator);
-      $('.item').first().addClass('active');
-      $('.carousel-indicators > li').first().addClass('active');
-      $("#myCarousel").carousel();
-   });
+            indicator = '';
+        for(var i=0; i < json.results.length; i++){
+          response += '<div class="item"><div><center><img alt="Profilepicture" title="New Hire" id="" width="30%" height="40%" class="table-bordered thick-border img-circle" src="' + json.results[i].picture_url + '" ></center></div><div class=""><center><h3>' + json.results[i].mentor_name + '</h3><p>' + json.results[i].profile_summary + '</p><h5>' +  json.results[i].match_score.toString() + '% match</h5></center></div></div>';
+          indicator += '<li data-target="#myCarousel" data-slide-to="'+i+'"></li>';
+        }
+        $('#homepageItems').append(response);
+        $('#indicators').append(indicator);
+        $('.item').first().addClass('active');
+        $('.carousel-indicators > li').first().addClass('active');
+        $("#myCarousel").carousel();
+    }
+  });
 });
