@@ -96,7 +96,7 @@ function updateCookies(program_url){
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
         chrome.browserAction.setBadgeText({text: getNotificationCount()});
-        chrome.browserAction.setPopup({popup: 'mentor_mentee_list.html'}, function(){});
+        chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
       }
       else{    
         // chrome.storage.sync.set({"chronuslogin": false});
@@ -104,7 +104,7 @@ function updateCookies(program_url){
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
         chrome.browserAction.setBadgeText({text: ''});
         chrome.storage.sync.remove('user_id', function(){});
-        chrome.browserAction.setPopup({popup: 'popup.html'}, function(){});
+        chrome.browserAction.setPopup({popup: 'unloggedin.html'}, function(){});
       }
     });
 }
