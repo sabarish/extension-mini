@@ -19,12 +19,18 @@ function focusOrCreateTab(url) {
   });
 }
 
-function getNotificationCount(){
-  return "5";
-}
-
 function createNotification(details){
   var i;
+  var old_count;
+  chrome.storage.sync.get('noti_count', function(notifications){
+    old_count = parseInt(notifications.noti_count) || 0;
+    new_count = old_count + details.length
+    new_count = new_count || ''
+    if (new_count != old_count){ 
+      chrome.browserAction.setBadgeText({text: new_count.toString() });
+      chrome.storage.sync.set({'noti_count': new_count.toString()}, function(){}); }
+  });
+
   for (i = 0; i < details.length; i++) {
     options = {
       type: "basic",
@@ -36,17 +42,25 @@ function createNotification(details){
   }
 }
 
+function get_content_url(content, url){
+  if(content["url"]!=null){
+    page = content["url"]; }
+  else if(content["title"] == "AbstractMessage"){
+    page = url + "/messages"; }
+  else if(content["title"] == "Scrap"){
+    page = url + "/scraps"; }
+  else{
+    page = url; }
+  return page;
+}
+
 function createNotificationList(list, url){
   var i;
-  var count = (list.length !=0 ) ? list.length.toString() : '0'
-  //chrome.browserAction.setBadgeText({text: count });
   var notification_list = '';
   for (i = 0; i < list.length; i++) {
-    open_url = (list[i]["url"] != null) ? list[i]["url"] : url
+    open_url = get_content_url(list[i], url);
     notification_list += '<a href="'+ open_url +'" target="_blank" class="list-group-item list-group-item-action"><i class="glyphicon glyphicon-envelope"></i><span style="padding-left:10px">' + list[i]["message"] + '</span></a>';
   }
-  //jQuery('#notifications').append(notification_list);
-  // chrome.storage.sync.set({'content': notification_list }, function(){});
   chrome.runtime.sendMessage({listt: notification_list}, function(response){});
 }
 
@@ -62,7 +76,7 @@ function getNotifications(user_id, url){
     success: function(response){
       console.log("hii"+user_id);
       createNotification(response);
-      setTimeout(getNotifications(user_id, url), 5000);
+      setTimeout(getNotifications(user_id, url), 3000);
     }
   });
 }
@@ -135,7 +149,7 @@ function updateCookies(program_url){
         // loginURL();
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
-        chrome.browserAction.setBadgeText({text: "0"});
+        chrome.browserAction.setBadgeText({text: ''});
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
       }
       else{    
