@@ -53,6 +53,15 @@ textarea{
   margin-right: auto;  
 }
 
+section a.list-group-item:first-child{
+  border-top: 0px !important;  
+}
+
+section a.list-group-item{  
+  border-left: 0px !important;
+  border-right: 0px !important;
+}
+
 /* Scroll Bar */
 ::-webkit-scrollbar { 
   width: 6px; 
