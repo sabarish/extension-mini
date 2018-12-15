@@ -9,7 +9,7 @@ $(document).ready(function() {
       var response = '',
             indicator = '';
         for(var i=0; i < json.results.length; i++){
-          response += '<div class="item"><div><center><img alt="Profilepicture" title="New Hire" id="" width="30%" height="40%" class="table-bordered thick-border img-circle" src="' + json.results[i].picture_url + '" ></center></div><div class=""><center><h3>' + json.results[i].mentor_name + '</h3><p>' + json.results[i].profile_summary + '</p><h5>' +  json.results[i].match_score.toString() + '% match</h5></center></div></div>';
+          response += '<div class="item"><div><center><img alt="Profilepicture" title="New Hire" id="" width="20%" height="20%" class="table-bordered thick-border img-circle" src="' + json.results[i].picture_url + '" ></center></div><div class=""><center><h3>' + json.results[i].mentor_name + '</h3><p>' + json.results[i].profile_summary + '</p><h5>' +  json.results[i].match_score.toString() + '% match</h5></center></div></div>';
           indicator += '<li data-target="#myCarousel" data-slide-to="'+i+'"></li>';
         }
         $('#homepageItems').append(response);
