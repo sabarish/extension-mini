@@ -36,6 +36,10 @@ function createNotification(details){
   }
 }
 
+function store_details(user_details){
+  chrome.storage.sync.set({'is_admin': user_details["is_admin"], 'is_connected': user_details["is_connected"], 'state': user_details["state"], 'roles': user_details["roles"] }, function(){});
+}
+
 function getNotifications(user_id, url){
   jQuery.ajax({
     type: "GET",
@@ -49,6 +53,16 @@ function getNotifications(user_id, url){
   });
 }
 
+function getUserDetails(user_id, url){
+  jQuery.ajax({
+    type: "GET",
+    data: { 'user_id': user_id },
+    url: url+"/get_user_details.json",
+    success: function(response){
+      store_details(response);
+    }
+  });
+}
 
 function isUserLoggedin(){
   var np = new Promise(function (resolve, reject) {
@@ -114,6 +128,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (sender.url.includes(result.program_url)){
       UserId = parseInt(request.loginstatus)
       if (UserId){
+        getUserDetails(UserId, result.program_url);
         getNotifications(UserId, result.program_url);
         chrome.storage.sync.set({'user_id': request.loginstatus}, function() {});
         if (result.from_extension){
