@@ -22,3 +22,9 @@ $(document).ready(function() {
     }
   });
 });
+
+
+jQuery(document).on("click", "#notification_tab", function(){
+  chrome.storage.sync.set({'noti_count': ''}, function(){});
+  chrome.browserAction.setBadgeText({text: '' });
+});

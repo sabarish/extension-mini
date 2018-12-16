@@ -9,7 +9,7 @@ $(document).ready(function() {
    else{
      $('a.navbar-brand').attr('href', 'unconnected_user.html');
    }
-   if(result.roles.indexOf("Student") == -1){
+   if(result.roles != undefined && result.roles.indexOf("Student") == -1){
       jQuery("#request_mentor").html("Offer Mentoring");
    } 
    if(user_id){ 
