@@ -34,6 +34,10 @@ textarea{
   overflow-y: auto !important;
 }
 
+.hide{
+  display: none;
+}
+
 .button{
 	margin: 5px 0;
     font-size: 15px;

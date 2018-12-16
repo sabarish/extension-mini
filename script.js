@@ -1,6 +1,6 @@
 // Code goes here
 $(document).ready(function() {
-  chrome.storage.sync.get(['program_url', 'user_id', 'is_connected'], function(result) {
+  chrome.storage.sync.get(['program_url', 'user_id', 'is_connected', 'roles'], function(result) {
    user_id = parseInt(result.user_id);
    url = result.program_url;
    if(result.is_connected){
@@ -9,6 +9,9 @@ $(document).ready(function() {
    else{
      $('a.navbar-brand').attr('href', 'unconnected_user.html');
    }
+   if(result.roles.indexOf("Student") == -1){
+      jQuery("#request_mentor").html("Offer Mentoring");
+   } 
    if(user_id){ 
     $.ajax({
       type: "GET",

@@ -65,7 +65,7 @@ function createNotificationList(list, url){
 }
 
 function store_details(user_details){
-  chrome.storage.sync.set({'is_admin': user_details["is_admin"], 'is_connected': user_details["is_connected"], 'state': user_details["state"], 'roles': user_details["roles"] }, function(){});
+  chrome.storage.sync.set({'is_admin': user_details["is_admin"], 'is_connected': user_details["is_connected"], 'state': user_details["state"], 'roles': user_details["roles"], 'user_picture_url': user_details["user_picture_url"], 'member_id': user_details["member_id"] }, function(){});
 }
 
 function getNotifications(user_id, url){
@@ -148,10 +148,10 @@ function updateConnectionPopup() {
       chrome.browserAction.setPopup({popup: 'connected_user.html'}, function(){});
     }
     else{
-      if(result.roles != undefined && result.roles.indexOf("student") !== -1){
+      if(result.roles != undefined && result.roles.indexOf("Student") !== -1){
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
       }
-      else if(result.roles != undefined && result.roles.indexOf("mentor") !== -1){
+      else if(result.roles != undefined && result.roles.indexOf("Mentor") !== -1){
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
       }
     }
