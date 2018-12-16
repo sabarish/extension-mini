@@ -44,6 +44,15 @@ jQuery(document).on("click", "#send_message", function(){
   chrome.storage.sync.set({'message_user_name': user_name}, function(){});
 });
 
+
+jQuery(document).on("click", "#request_mentor", function(){
+  var user_id = jQuery(".active #hidden_attr").attr("uid");
+  var user_name = jQuery(".active #hidden_attr").attr("uname");  
+  chrome.storage.sync.set({'message_user_id': user_id}, function(){});
+  chrome.storage.sync.set({'message_user_name': user_name}, function(){});
+});
+
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   jQuery('#notifications').html(request.listt);
 });
