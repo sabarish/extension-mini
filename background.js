@@ -24,7 +24,7 @@ function createNotification(details){
   var old_count;
   chrome.storage.sync.get('noti_count', function(notifications){
     old_count = parseInt(notifications.noti_count) || 0;
-    new_count = old_count + (details.length > 0 ? 1 : 0);
+    new_count = old_count + details.length;
     if (new_count != old_count){ 
       new_count = new_count || ''
       chrome.browserAction.setBadgeText({text: new_count.toString() });
@@ -69,16 +69,18 @@ function store_details(user_details){
 }
 
 function getNotifications(user_id, url){
-  jQuery.ajax({
+  let delay = 3200;
+  let timerId = setInterval(function recNotification() {
+    jQuery.ajax({
     type: "GET",
     data: { 'user_id': user_id, 'target': 'desktop' },
     url: url+"/get_notifications.json",
     success: function(response){
-      console.log("hii"+user_id);
-      createNotification(response);
-      setTimeout(getNotifications(user_id, url), 1500);
-    }
-  });
+        console.log("hii"+new Date());
+        createNotification(response);
+      }
+    });    
+  }, delay);  
 }
 
 function getNotificationsList(user_id, url){
