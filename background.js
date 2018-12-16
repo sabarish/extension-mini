@@ -5,7 +5,7 @@ function focusOrCreateTab(url) {
       var tabs = windows[i].tabs;
       for (var j in tabs) {
         var tab = tabs[j];
-        if (tab.url.includes(url)) {
+        if (tab.url.includes(url+"/session/new")) {
           existing_tab = tab;
           break;
         }
@@ -24,7 +24,7 @@ function createNotification(details){
   var old_count;
   chrome.storage.sync.get('noti_count', function(notifications){
     old_count = parseInt(notifications.noti_count) || 0;
-    new_count = old_count + details.length
+    new_count = old_count + (details.length > 0 ? 1 : 0);
     if (new_count != old_count){ 
       new_count = new_count || ''
       chrome.browserAction.setBadgeText({text: new_count.toString() });
@@ -76,7 +76,7 @@ function getNotifications(user_id, url){
     success: function(response){
       console.log("hii"+user_id);
       createNotification(response);
-      setTimeout(getNotifications(user_id, url), 500);
+      setTimeout(getNotifications(user_id, url), 1500);
     }
   });
 }
@@ -88,7 +88,7 @@ function getNotificationsList(user_id, url){
     url: url+"/get_notifications.json",
     success: function(response){
       createNotificationList(response, url);
-      setTimeout(getNotificationsList(user_id, url), 10000);
+      setTimeout(getNotificationsList(user_id, url), 5000);
     }
   });
 }
@@ -167,7 +167,14 @@ function updateCookies(program_url){
         // isUserLoggedin();
         chrome.browserAction.setBadgeBackgroundColor({ color: "#db4437" });
         chrome.storage.sync.get('noti_count', function(notifications){
-          chrome.browserAction.setBadgeText({text: notifications.noti_count });
+          var count ='';
+          if(notifications.noti_count == null){
+            count ='';
+          }
+          else{
+            count = notifications.noti_count;
+          }
+          chrome.browserAction.setBadgeText({text: count });
         });
         chrome.browserAction.setPopup({popup: 'unconnected_user.html'}, function(){});
         updateConnectionPopup();       
