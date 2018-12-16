@@ -143,7 +143,6 @@ function setBrowserIcon(color){
 function updateConnectionPopup() {
   chrome.storage.sync.get(['is_connected', 'roles'], function(result) {
     if(result.is_connected){
-      alert("connection");
       chrome.browserAction.setPopup({popup: 'connected_user.html'}, function(){});
     }
     else{
@@ -216,6 +215,7 @@ jQuery(document).ready(function() {
     chrome.storage.sync.set({'from_extension': true}, function() {});
     focusOrCreateTab(program_url);
   });
+  updateConnectionPopup();
 });
 
 chrome.runtime.onInstalled.addListener(function() {

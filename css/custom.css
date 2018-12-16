@@ -72,5 +72,5 @@ section .list-group-item{
 }
 
 ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:window-inactive  { 
-  background: red; 
+  background: grey; 
 }
